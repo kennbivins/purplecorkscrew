@@ -23,131 +23,102 @@ const observer = new IntersectionObserver((entries) => {
 });
 reveals.forEach(el => observer.observe(el));
 
+
 // ═══════════════════════════════════════════════════════════════
-//  EVENTBRITE AUTO-FEED INTEGRATION
+//  INSTAGRAM GALLERY INTEGRATION (Optional — DIY approach)
 // ═══════════════════════════════════════════════════════════════
 //
-//  HOW TO CONNECT:
+//  The Gallery section supports two approaches:
 //
-//  1. Go to https://www.eventbrite.com/platform/api-keys
-//     → Create a free API key. Copy the "Private token."
+//  ─────────────────────────────────────────────────────────────
+//  OPTION A — Third-party widget (RECOMMENDED)
+//  ─────────────────────────────────────────────────────────────
 //
-//  2. Find Purple Corkscrew's Organizer ID:
-//     → Log in to Eventbrite
-//     → Go to Settings → Organization Settings
-//     → The numeric ID is in the URL bar
+//  Use Behold (https://behold.so), EmbedSocial, or Elfsight.
 //
-//  3. Set the Eventbrite public profile URL below
-//     (e.g. https://www.eventbrite.com/o/purple-corkscrew-12345678)
+//  1. Sign up → connect @purplecorkscrewwine
+//  2. Choose a layout (grid, masonry, slider, etc.)
+//  3. Copy the <script> embed snippet they provide
+//  4. Paste it inside the <div id="instagram-feed"> in index.html
+//  5. The static fallback grid auto-hides via CSS when the
+//     widget renders content into #instagram-feed
 //
-//  4. Fill in the 3 values in EB_CONFIG below.
+//  Behold free tier: 1 feed, 12 posts, auto-syncs. No tokens.
 //
-//  Once set, events auto-populate from Eventbrite on every page load.
-//  No manual updates needed — add/edit events in Eventbrite as usual.
+//  ─────────────────────────────────────────────────────────────
+//  OPTION B — Instagram Basic Display API (DIY)
+//  ─────────────────────────────────────────────────────────────
 //
-//  ⚠ SECURITY NOTE: The token is visible in client-side code.
-//  This is fine for read-only public event data. For stricter security,
-//  wrap this in a Cloudflare Worker or Netlify Function (ask Kenn!).
+//  If you want full control over the gallery UI, use the
+//  Instagram API directly. Steps:
 //
-//  ALTERNATIVE (no API key needed):
-//  Use Eventbrite's built-in "Embedded Checkout" instead.
-//  In each event's dashboard → Marketing → Embedded Checkout
-//  → Copy the embed code snippet → Paste inside #eventbrite-feed div.
-//  This gives you a per-event embed button but won't auto-pull new events.
+//  1. Create a Meta developer app at developers.facebook.com
+//  2. Add "Instagram Basic Display" product
+//  3. Generate a long-lived user access token
+//  4. Paste it below in IG_CONFIG.token
+//  5. The code below will fetch posts and render them
+//
+//  ⚠ Token expires every 60 days — set a calendar reminder
+//     to refresh it, or automate via a serverless function.
+//
+//  ⚠ The token is visible in client-side JS. For read-only
+//     public media this is acceptable. For tighter security,
+//     proxy through a Cloudflare Worker or Netlify Function.
 //
 // ═══════════════════════════════════════════════════════════════
 
-const EB_CONFIG = {
-    token: '', // ← PASTE OAUTH TOKEN HERE
-    organizerId: '', // ← PASTE ORGANIZER ID HERE
-    profileUrl: '#', // ← PASTE PUBLIC EVENTBRITE URL HERE
-    maxEvents: 3
+const IG_CONFIG = {
+    token: '',       // ← PASTE LONG-LIVED ACCESS TOKEN HERE
+    maxPosts: 6      // Number of posts to display
 };
 
-document.getElementById('eventbrite-link').href = EB_CONFIG.profileUrl;
+async function loadInstagramFeed() {
+    const feedEl = document.getElementById('instagram-feed');
+    const staticEl = document.getElementById('gallery-static');
 
-async function loadEventbriteEvents() {
-    const loadingEl = document.getElementById('events-loading');
-    const staticEl = document.getElementById('events-static');
-    const feedEl = document.getElementById('eventbrite-feed');
-
-    // No token? Show static fallback cards instead.
-    if (!EB_CONFIG.token || !EB_CONFIG.organizerId) {
-        loadingEl.style.display = 'none';
-        staticEl.style.display = 'grid';
-        return;
-    }
+    // No token configured — keep the static fallback visible
+    if (!IG_CONFIG.token) return;
 
     try {
         const res = await fetch(
-            `https://www.eventbriteapi.com/v3/organizations/${EB_CONFIG.organizerId}/events/?status=live&order_by=start_asc&expand=venue,logo`, {
-                headers: {
-                    'Authorization': `Bearer ${EB_CONFIG.token}`
-                }
-            }
+            `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&limit=${IG_CONFIG.maxPosts}&access_token=${IG_CONFIG.token}`
         );
-        if (!res.ok) throw new Error(`API ${res.status}`);
+        if (!res.ok) throw new Error(`Instagram API ${res.status}`);
 
         const data = await res.json();
-        const events = (data.events || []).slice(0, EB_CONFIG.maxEvents);
+        const posts = data.data || [];
 
-        if (!events.length) {
-            loadingEl.style.display = 'none';
-            staticEl.style.display = 'grid';
-            return;
-        }
+        if (!posts.length) return;
 
+        // Build gallery grid from API data
         const grid = document.createElement('div');
-        grid.className = 'events-grid';
+        grid.className = 'gallery-grid';
 
-        events.forEach(evt => {
-            const start = new Date(evt.start.local);
-            const dateStr = start.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            });
-            const timeStr = start.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit'
-            });
+        posts.forEach(post => {
+            const imgSrc = post.media_type === 'VIDEO'
+                ? (post.thumbnail_url || post.media_url)
+                : post.media_url;
 
-            const imgHtml = (evt.logo && evt.logo.url) ?
-                `<img src="${evt.logo.url}" alt="${evt.name.text}" loading="lazy">` :
-                '🍷';
+            const caption = post.caption
+                ? post.caption.substring(0, 80) + '…'
+                : 'View on Instagram';
 
-            const desc = evt.summary ||
-                (evt.description && evt.description.text ?
-                    evt.description.text.substring(0, 150) + '…' :
-                    'Join us for this upcoming event at Purple Corkscrew.');
-
-            const statusClass = evt.is_free ? 'free' : 'upcoming';
-            const statusLabel = evt.is_free ? 'Free' : 'Tickets Available';
+            const safeCaption = caption.replace(/"/g, '&quot;');
 
             grid.innerHTML += `
-  <div class="event-card">
-    <div class="event-card-img">${imgHtml}</div>
-    <div class="event-card-body">
-      <div class="event-card-date">${dateStr} · ${timeStr}</div>
-      <h4 class="event-card-title"><a href="${evt.url}" target="_blank" rel="noopener">${evt.name.text}</a></h4>
-      <p class="event-card-desc">${desc}</p>
-      <div class="event-card-footer">
-        <span class="event-card-status ${statusClass}">${statusLabel}</span>
-        <a href="${evt.url}" target="_blank" rel="noopener" class="event-card-link">Get Tickets →</a>
-      </div>
-    </div>
-  </div>`;
+                <a href="${post.permalink}" target="_blank" rel="noopener" class="gallery-item" title="${safeCaption}">
+                    <img src="${imgSrc}" alt="${safeCaption}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+                    <div class="gallery-overlay"><span>View Post</span></div>
+                </a>`;
         });
 
-        loadingEl.style.display = 'none';
         feedEl.appendChild(grid);
+        // Static grid auto-hides via CSS: #instagram-feed:not(:empty) ~ #gallery-static
 
     } catch (err) {
-        console.warn('Eventbrite fetch failed:', err);
-        loadingEl.style.display = 'none';
-        staticEl.style.display = 'grid';
+        console.warn('Instagram feed fetch failed:', err);
+        // Static fallback remains visible
     }
 }
 
-loadEventbriteEvents();
+loadInstagramFeed();
