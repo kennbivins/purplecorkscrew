@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purple Corkscrew — Wine Shop & Tasting Room | Avondale Estates, GA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0711;
+            --bg-section: #100d18;
+            --bg-card: #1a1525;
+            --purple-primary: #8b5cf6;
+            --purple-glow: #a78bfa;
+            --purple-dark: #6d28d9;
+            --wine-red: #9b2335;
+            --wine-blush: #c5687d;
+            --gold: #d4a853;
+            --gold-light: #e8c97a;
+            --text-primary: #f0ece4;
+            --text-secondary: #a8a0b4;
+            --text-muted: #6b6278;
+            --divider: rgba(139, 92, 246, 0.15);
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 3rem;
+            background: rgba(10, 7, 17, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--divider);
+            transition: all 0.4s;
+        }
+
+        nav.scrolled {
+            padding: 0.6rem 3rem;
+            background: rgba(10, 7, 17, 0.95);
+        }
+
+        .nav-brand {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--purple-glow);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(109, 40, 217, 0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 30% 70%, rgba(155, 35, 53, 0.08) 0%, transparent 60%);
+        }
+
+        .hero-tag {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.2s forwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            color: var(--text-primary);
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.4s forwards;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--purple-glow);
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 1.5rem auto 2.5rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.6s forwards;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.8s forwards;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2.2rem;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.35s;
+        }
+
+        .btn-primary {
+            background: var(--purple-primary);
+            color: #fff;
+            border-radius: 0;
+        }
+
+        .btn-primary:hover {
+            background: var(--purple-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--text-muted);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--bg-deep);
+            border-radius: 0;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-wine {
+            background: var(--wine-red);
+            color: #fff;
+            border-radius: 0;
+        }
+
+        .btn-wine:hover {
+            background: #b12a40;
+            transform: translateY(-2px);
+        }
+
+        .btn-arrow::after {
+            content: '→';
+            margin-left: 0.3rem;
+            transition: transform 0.3s;
+        }
+
+        .btn-arrow:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* ─── SECTIONS ─── */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-full {
+            max-width: 100%;
+            padding: 6rem 0;
+        }
+
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 1px;
+            background: var(--purple-primary);
+            margin: 0 auto 1.5rem;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .section-subheading {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1rem;
+        }
+
+        /* ─── ABOUT ─── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+        }
+
+        .about-text h3 em {
+            color: var(--purple-glow);
+            font-style: italic;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .about-stat-row {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--divider);
+        }
+
+        .about-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .about-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .about-visual {
+            position: relative;
+            aspect-ratio: 4/5;
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-visual-icon {
+            font-size: 8rem;
+            opacity: 0.15;
+        }
+
+        .about-visual-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(10, 7, 17, 0.95), transparent);
+        }
+
+        .about-visual-overlay p {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ─── EXPERIENCE CARDS ─── */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .exp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            padding: 2.5rem 2rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--purple-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .exp-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .exp-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .exp-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .exp-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .exp-card p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        .exp-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .exp-card li {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            padding: 0.4rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .exp-card li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--purple-primary);
+            font-size: 0.55rem;
+            top: 0.6rem;
+        }
+
+        /* ─── BANNER / CTA STRIP ─── */
+        .cta-strip {
+            background: var(--bg-section);
+            border-top: 1px solid var(--divider);
+            border-bottom: 1px solid var(--divider);
+            text-align: center;
+            padding: 3.5rem 2rem;
+        }
+
+        .cta-strip h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-strip p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── EVENTS SECTION ─── */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .event-card {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            overflow: hidden;
+            transition: all 0.4s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .event-card-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: var(--bg-section);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .event-card-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card-date {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 0.6rem;
+        }
+
+        .event-card-title a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .event-card-title a:hover {
+            color: var(--purple-glow);
+        }
+
+        .event-card-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .event-card-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--divider);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-card-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.7rem;
+        }
+
+        .event-card-status.upcoming {
+            color: var(--purple-glow);
+            background: rgba(139, 92, 246, 0.12);
+        }
+
+        .event-card-status.free {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .event-card-link {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .event-card-link:hover {
+            color: var(--gold-light);
+        }
+
+        .events-loading,
+        .events-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .events-loading .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--divider);
+            border-top-color: var(--purple-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ─── ARTICLES / NEWS ─── */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            padding: 2rem;
+            transition: all 0.4s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .article-card-source {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--wine-blush);
+            margin-bottom: 0.8rem;
+        }
+
+        .article-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 0.6rem;
+        }
+
+        .article-card h4 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .article-card h4 a:hover {
+            color: var(--purple-glow);
+        }
+
+        .article-card p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .article-card-read {
+            display: inline-block;
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .article-card-read:hover {
+            color: var(--gold-light);
+        }
+
+        .article-card-read::after {
+            content: ' →';
+        }
+
+        /* ─── STORY SECTION ─── */
+        .story-section {
+            background: var(--bg-section);
+        }
+
+        .story-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .story-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .founder-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-top: 2rem;
+        }
+
+        .founder-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        /* ─── TESTIMONIALS ─── */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .test-card {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .test-card::before {
+            content: '"';
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: var(--purple-primary);
+            opacity: 0.3;
+            position: absolute;
+            top: 0.5rem;
+            left: 1rem;
+            line-height: 1;
+        }
+
+        .test-card p {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .test-card cite {
+            font-style: normal;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .test-stars {
+            color: var(--gold);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* ─── VISIT / HOURS ─── */
+        .visit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .hours-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .hours-table tr {
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .hours-table td {
+            padding: 0.8rem 0;
+            font-size: 0.95rem;
+        }
+
+        .hours-table td:first-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .hours-table td:last-child {
+            text-align: right;
+            color: var(--text-secondary);
+        }
+
+        .hours-table tr.closed td:last-child {
+            color: var(--wine-blush);
+        }
+
+        .visit-info-block {
+            margin-top: 2rem;
+        }
+
+        .visit-info-block h4 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .visit-info-block p {
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .visit-info-block a {
+            color: var(--purple-glow);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .visit-info-block a:hover {
+            color: var(--gold);
+        }
+
+        .cashless-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--divider);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--purple-glow);
+        }
+
+        .map-placeholder {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        .map-pin {
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .map-label {
+            position: relative;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .map-link {
+            position: relative;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--purple-glow);
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .map-link:hover {
+            color: var(--gold);
+        }
+
+        /* ─── EMAIL SIGNUP ─── */
+        .signup-section {
+            background: linear-gradient(180deg, var(--bg-section), var(--bg-deep));
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .signup-section h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--divider);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--purple-glow);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+
+        .footer-socials a:hover {
+            color: var(--gold);
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+
+            .about-grid,
+            .visit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-grid,
+            .events-grid,
+            .articles-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-visual {
+                aspect-ratio: 16/9;
+            }
+
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 7, 17, 0.97);
+                padding: 1.5rem 2rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--divider);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav id="navbar">
+        <a href="#" class="nav-brand">Purple Corkscrew</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#story">Our Story</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#voices">Reviews</a></li>
+            <li><a href="#visit">Visit</a></li>
+            <li><a href="#connect">Connect</a></li>
+        </ul>
+        <button class="hamburger" id="menuBtn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero">
+        <p class="hero-tag">Wine Shop &amp; Tasting Room — Avondale Estates, GA</p>
+        <h1 class="hero-title">Sip. <em>Savor.</em><br>Celebrate.</h1>
+        <p class="hero-sub">A cozy, curated wine experience where every guest feels at home. Walk in curious, leave
+            inspired.</p>
+        <div class="hero-cta-group">
+            <a href="#visit" class="btn btn-primary btn-arrow">Plan Your Visit</a>
+            <a href="#events" class="btn btn-outline">Upcoming Events</a>
+        </div>
+    </section>
+
+    <!-- ─── ABOUT ─── -->
+    <section id="about" class="reveal">
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="section-label">Who We Are</p>
+                <h3>A Space Where <em>You Never Have to Pretend</em> You Know Wine</h3>
+                <p>Purple Corkscrew is a boutique wine shop and tasting room in the heart of Avondale Estates. Founded
+                    by Steffini Bethea in 2012, we were built on a simple idea: wine should be welcoming, never stuffy.
+                </p>
+                <p>Our team tastes roughly 50 wines a week to curate a collection that has something for everyone — from
+                    bold reds and crisp whites to exciting discoveries from around the world.</p>
+                <div class="about-stat-row">
+                    <div>
+                        <div class="about-stat-num">13+</div>
+                        <div class="about-stat-label">Years Pouring</div>
+                    </div>
+                    <div>
+                        <div class="about-stat-num">50</div>
+                        <div class="about-stat-label">Wines Tasted Weekly</div>
+                    </div>
+                    <div>
+                        <div class="about-stat-num">6</div>
+                        <div class="about-stat-label">Days Open</div>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="about-visual-icon">🍷</div>
+                <div class="about-visual-overlay">
+                    <p>"I wanted people to feel like they're a guest in my home enjoying wine."</p>
+                    <div class="founder-name" style="text-align:left; margin-top:0.8rem;">— Steffini Bethea</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── THE EXPERIENCE ─── -->
+    <section id="experience" class="reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">The Experience</p>
+        <h2 class="section-heading">Sip & Shop in One Location</h2>
+        <p class="section-subheading">Whether you're here for a quick glass, a guided tasting, or to find the perfect
+            bottle — we've got you.</p>
+        <div class="experience-grid">
+            <div class="exp-card">
+                <div class="exp-icon">🥂</div>
+                <h4>Wine Flights</h4>
+                <p>Three curated 2oz pours designed to broaden your palate and introduce you to something new.</p>
+                <ul>
+                    <li>3-wine flight — $15</li>
+                    <li>Single 3oz pour — $6</li>
+                    <li>Staff-guided tasting notes</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <div class="exp-icon">🍇</div>
+                <h4>Curated Collection</h4>
+                <p>Domestic and international selections — California, Oregon, France, Italy, South Africa, and beyond.
+                </p>
+                <ul>
+                    <li>Rotating seasonal selections</li>
+                    <li>Sommelier recommendations</li>
+                    <li>Hidden gems & cult favorites</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <div class="exp-icon">🎉</div>
+                <h4>Events & Private Tastings</h4>
+                <p>From Thursday night tastings to private celebrations — we create memorable wine moments.</p>
+                <ul>
+                    <li>Weekly tasting events</li>
+                    <li>Private party hosting</li>
+                    <li>Wine education classes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EVENTS ─── -->
+    <section id="events" class="reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">What's Coming Up</p>
+        <h2 class="section-heading">Upcoming Events</h2>
+        <p class="section-subheading">Wine tastings, live music, special pairings, and more. Grab your spot before they
+            fill up.</p>
+
+        <!-- Eventbrite API feed renders here -->
+        <div id="eventbrite-feed">
+            <div class="events-loading" id="events-loading">
+                <div class="spinner"></div>
+                <p>Loading upcoming events...</p>
+            </div>
+        </div>
+
+        <!-- FALLBACK: Static event cards shown when API is not configured -->
+        <div class="events-grid" id="events-static" style="display:none;">
+            <div class="event-card">
+                <div class="event-card-img">🍷</div>
+                <div class="event-card-body">
+                    <div class="event-card-date">Every Thursday</div>
+                    <h4 class="event-card-title"><a href="#">Thursday Night Wine Tasting</a></h4>
+                    <p class="event-card-desc">Join us weekly for a guided tasting of three rotating wines. Learn
+                        tasting notes, regions, and food pairings from our knowledgeable staff.</p>
+                    <div class="event-card-footer">
+                        <span class="event-card-status upcoming">Recurring</span>
+                        <a href="#visit" class="event-card-link">Details →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-card-img">🎶</div>
+                <div class="event-card-body">
+                    <div class="event-card-date">Check Eventbrite</div>
+                    <h4 class="event-card-title"><a href="#">Live Music & Wine Nights</a></h4>
+                    <p class="event-card-desc">Good wine deserves good vibes. Check our Eventbrite page for upcoming
+                        live music sessions paired with specially curated wine selections.</p>
+                    <div class="event-card-footer">
+                        <span class="event-card-status upcoming">Upcoming</span>
+                        <a href="#visit" class="event-card-link">Details →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-card-img">🥂</div>
+                <div class="event-card-body">
+                    <div class="event-card-date">Book Anytime</div>
+                    <h4 class="event-card-title"><a href="#">Private Tasting Experience</a></h4>
+                    <p class="event-card-desc">Host your birthday, date night, or team outing at the Corkscrew. We'll
+                        curate a custom tasting for your group.</p>
+                    <div class="event-card-footer">
+                        <span class="event-card-status upcoming">Available</span>
+                        <a href="tel:6785158232" class="event-card-link">Call to Book →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:2.5rem;">
+            <a href="#" id="eventbrite-link" class="btn btn-wine btn-arrow" target="_blank" rel="noopener">View All
+                Events on Eventbrite</a>
+        </div>
+    </section>
+
+    <!-- ─── CTA STRIP ─── -->
+    <div class="cta-strip reveal">
+        <h3>Come As You Are. Leave with a New Favorite.</h3>
+        <p>No pretension. No judgment. Just great wine and great company.</p>
+        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Join Our Email
+            List</a>
+    </div>
+
+    <!-- ─── OUR STORY ─── -->
+    <section id="story" class="section-full story-section reveal">
+        <div class="section-inner">
+            <div class="section-divider"></div>
+            <p class="section-label">Our Story</p>
+            <h2 class="section-heading">Born from a Trip to Spain</h2>
+            <div class="story-content">
+                <p>Before wine, Steffini was in pharmaceutical sales. After being laid off in 2010, a trip to Spain
+                    introduced her to wines she'd never experienced in the U.S. — and she couldn't stop exploring. Her
+                    husband told her: "If you're going to drink wine like this, you need to figure out a way to make
+                    money doing it."</p>
+                <p>Purple Corkscrew was born. First in Emory Village, then finding its true home in Avondale Estates — a
+                    close-knit, walkable community that matched the shop's warmth perfectly. Thirteen years later, the
+                    staff is family, the regulars are friends, and every bottle on the shelf has been personally vetted.
+                </p>
+                <div class="founder-name">Steffini Bethea</div>
+                <div class="founder-title">Founder & Owner</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── NEWS / ARTICLES ─── -->
+    <section id="news" class="reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">In the News</p>
+        <h2 class="section-heading">Stories & Press</h2>
+        <p class="section-subheading">What people are writing about Purple Corkscrew and Steffini.</p>
+
+        <div class="articles-grid">
+            <!--
+      TO ADD A NEW ARTICLE:
+      Copy one of these article-card blocks, paste it as the FIRST
+      card in the grid, and update the source, title, summary, and URL.
+    -->
+            <div class="article-card">
+                <div class="article-card-source">Voyage ATL Magazine</div>
+                <h4><a href="https://voyageatl.com/interview/meet-steffini-bethea-purple-corkscrew-wine-shop-tasting-room/"
+                        target="_blank" rel="noopener">Meet Steffini Bethea of The Purple Corkscrew Wine Shop & Tasting
+                        Room</a></h4>
+                <p>An in-depth conversation about the journey from pharmaceutical sales to wine shop owner — the trip to
+                    Spain, the early days in Emory Village, and finding home in Avondale Estates.</p>
+                <a href="https://voyageatl.com/interview/meet-steffini-bethea-purple-corkscrew-wine-shop-tasting-room/"
+                    target="_blank" rel="noopener" class="article-card-read">Read Article</a>
+            </div>
+            <div class="article-card">
+                <div class="article-card-source">Decaturish</div>
+                <h4><a href="https://www.decaturish.com/news/avondale_estates/small-business-spotlight-purple-corkscrew/article_e065b150-cede-5f59-a9af-5ede1dfe434a.html"
+                        target="_blank" rel="noopener">Small Business Spotlight: Purple Corkscrew</a></h4>
+                <p>A close look at how Purple Corkscrew makes wine accessible, encourages curiosity over expertise, and
+                    became a beloved part of the Avondale Estates community.</p>
+                <a href="https://www.decaturish.com/news/avondale_estates/small-business-spotlight-purple-corkscrew/article_e065b150-cede-5f59-a9af-5ede1dfe434a.html"
+                    target="_blank" rel="noopener" class="article-card-read">Read Article</a>
+            </div>
+            <div class="article-card">
+                <div class="article-card-source">Georgia Business Journal</div>
+                <h4><a href="https://gbj.com/avondale-estates/food-drink/purple-corkscrew-wine-shop-tasting-room"
+                        target="_blank" rel="noopener">Best of Georgia: Purple Corkscrew Wine Shop & Tasting Room</a>
+                </h4>
+                <p>Purple Corkscrew was recognized as a 2024 Best of Georgia Honorable Mention winner in the Liquor &
+                    Wine Stores category.</p>
+                <a href="https://gbj.com/avondale-estates/food-drink/purple-corkscrew-wine-shop-tasting-room"
+                    target="_blank" rel="noopener" class="article-card-read">Read Article</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── TESTIMONIALS ─── -->
+    <section id="voices" class="reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">What People Are Saying</p>
+        <h2 class="section-heading">The Vibe Speaks for Itself</h2>
+        <p class="section-subheading">Don't take our word for it.</p>
+        <div class="testimonials-grid">
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>The ambiance was calm and serene. The decor was spot on. The music was just right. I will definitely
+                    be visiting again.</p>
+                <cite>— Yelp Review</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>I love Steffini and her staff. The place feels so welcoming and cozy. I've learned a lot about wine
+                    and had some great experiences there.</p>
+                <cite>— Kenn B.</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>We came for the Thursday night tasting, and it was lovely. Very friendly owner and staff, nice homey
+                    vibes, and ample parking.</p>
+                <cite>— Google Review</cite>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CTA STRIP 2 ─── -->
+    <div class="cta-strip reveal">
+        <h3>Your New Favorite Spot Awaits</h3>
+        <p>Walk-ins welcome. Reservations encouraged for tastings.</p>
+        <a href="tel:6785158232" class="btn btn-primary btn-arrow">Call (678) 515-8232</a>
+    </div>
+
+    <!-- ─── VISIT ─── -->
+    <section id="visit" class="reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">Visit Us</p>
+        <h2 class="section-heading">Come Pour with Us</h2>
+        <p class="section-subheading">Located in the heart of Avondale Estates, just steps from the town green.</p>
+        <div class="visit-grid">
+            <div>
+                <h4 style="font-family:var(--font-display); font-size:1.6rem; font-weight:700; margin-bottom:1.2rem;">
+                    Hours</h4>
+                <table class="hours-table">
+                    <tr>
+                        <td>Monday</td>
+                        <td>4 – 8 pm</td>
+                    </tr>
+                    <tr>
+                        <td>Tuesday</td>
+                        <td>4 – 8 pm</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>12 – 8 pm</td>
+                    </tr>
+                    <tr>
+                        <td>Thursday</td>
+                        <td>12 – 8 pm</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>12 – 9 pm</td>
+                    </tr>
+                    <tr>
+                        <td>Saturday</td>
+                        <td>12 – 9 pm</td>
+                    </tr>
+                    <tr class="closed">
+                        <td>Sunday</td>
+                        <td>Closed</td>
+                    </tr>
+                </table>
+                <div class="cashless-badge">💳 Cashless — Credit & Debit Only</div>
+                <div class="visit-info-block">
+                    <h4>Contact</h4>
+                    <p><a href="tel:6785158232">(678) 515-8232</a></p>
+                    <p><a href="mailto:info@purplecorkscrew.com">info@purplecorkscrew.com</a></p>
+                </div>
+                <div class="visit-info-block">
+                    <h4>Address</h4>
+                    <p>32 N Avondale Rd, Suite A</p>
+                    <p>Avondale Estates, GA 30002</p>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.5rem;">Free parking available.
+                    </p>
+                </div>
+            </div>
+            <div class="map-placeholder">
+                <div class="map-pin">📍</div>
+                <div class="map-label">32 N Avondale Rd<br>Suite A</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=32+N+Avondale+Rd+Avondale+Estates+GA"
+                    target="_blank" rel="noopener" class="map-link">Open in Google Maps →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EMAIL SIGNUP ─── -->
+    <div id="connect" class="signup-section reveal">
+        <div class="section-divider"></div>
+        <p class="section-label">Stay Connected</p>
+        <h2>Never Miss a Pour</h2>
+        <p>Get updates on new arrivals, upcoming events, and exclusive tastings delivered to your inbox.</p>
+        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Join the Email
+            List</a>
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="footer-brand">Purple Corkscrew</div>
+        <div class="footer-copy">Purple Corkscrew, LLC &copy; 2025 — Avondale Estates, GA</div>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/purplecorkscrewwine/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.purplecorkscrew.com" target="_blank" rel="noopener">Website</a>
+            <a href="mailto:info@purplecorkscrew.com">Email</a>
+        </div>
+    </footer>
+
+    <script>
+        // ─── NAV SCROLL ───
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ─── MOBILE MENU ───
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+        navLinks.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => navLinks.classList.remove('open'));
+        });
+
+        // ─── SCROLL REVEAL ───
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('visible');
+            });
+        }, {
+            threshold: 0.1
+        });
+        reveals.forEach(el => observer.observe(el));
+
+        // ═══════════════════════════════════════════════════════════════
+        //  EVENTBRITE AUTO-FEED INTEGRATION
+        // ═══════════════════════════════════════════════════════════════
+        //
+        //  HOW TO CONNECT:
+        //
+        //  1. Go to https://www.eventbrite.com/platform/api-keys
+        //     → Create a free API key. Copy the "Private token."
+        //
+        //  2. Find Purple Corkscrew's Organizer ID:
+        //     → Log in to Eventbrite
+        //     → Go to Settings → Organization Settings
+        //     → The numeric ID is in the URL bar
+        //
+        //  3. Set the Eventbrite public profile URL below
+        //     (e.g. https://www.eventbrite.com/o/purple-corkscrew-12345678)
+        //
+        //  4. Fill in the 3 values in EB_CONFIG below.
+        //
+        //  Once set, events auto-populate from Eventbrite on every page load.
+        //  No manual updates needed — add/edit events in Eventbrite as usual.
+        //
+        //  ⚠ SECURITY NOTE: The token is visible in client-side code.
+        //  This is fine for read-only public event data. For stricter security,
+        //  wrap this in a Cloudflare Worker or Netlify Function (ask Kenn!).
+        //
+        //  ALTERNATIVE (no API key needed):
+        //  Use Eventbrite's built-in "Embedded Checkout" instead.
+        //  In each event's dashboard → Marketing → Embedded Checkout
+        //  → Copy the embed code snippet → Paste inside #eventbrite-feed div.
+        //  This gives you a per-event embed button but won't auto-pull new events.
+        //
+        // ═══════════════════════════════════════════════════════════════
+
+        const EB_CONFIG = {
+            token: '', // ← PASTE OAUTH TOKEN HERE
+            organizerId: '', // ← PASTE ORGANIZER ID HERE
+            profileUrl: '#', // ← PASTE PUBLIC EVENTBRITE URL HERE
+            maxEvents: 3
+        };
+
+        document.getElementById('eventbrite-link').href = EB_CONFIG.profileUrl;
+
+        async function loadEventbriteEvents() {
+            const loadingEl = document.getElementById('events-loading');
+            const staticEl = document.getElementById('events-static');
+            const feedEl = document.getElementById('eventbrite-feed');
+
+            // No token? Show static fallback cards instead.
+            if (!EB_CONFIG.token || !EB_CONFIG.organizerId) {
+                loadingEl.style.display = 'none';
+                staticEl.style.display = 'grid';
+                return;
+            }
+
+            try {
+                const res = await fetch(
+                    `https://www.eventbriteapi.com/v3/organizations/${EB_CONFIG.organizerId}/events/?status=live&order_by=start_asc&expand=venue,logo`, {
+                        headers: {
+                            'Authorization': `Bearer ${EB_CONFIG.token}`
+                        }
+                    }
+                );
+                if (!res.ok) throw new Error(`API ${res.status}`);
+
+                const data = await res.json();
+                const events = (data.events || []).slice(0, EB_CONFIG.maxEvents);
+
+                if (!events.length) {
+                    loadingEl.style.display = 'none';
+                    staticEl.style.display = 'grid';
+                    return;
+                }
+
+                const grid = document.createElement('div');
+                grid.className = 'events-grid';
+
+                events.forEach(evt => {
+                    const start = new Date(evt.start.local);
+                    const dateStr = start.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    const timeStr = start.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit'
+                    });
+
+                    const imgHtml = (evt.logo && evt.logo.url) ?
+                        `<img src="${evt.logo.url}" alt="${evt.name.text}" loading="lazy">` :
+                        '🍷';
+
+                    const desc = evt.summary ||
+                        (evt.description && evt.description.text ?
+                            evt.description.text.substring(0, 150) + '…' :
+                            'Join us for this upcoming event at Purple Corkscrew.');
+
+                    const statusClass = evt.is_free ? 'free' : 'upcoming';
+                    const statusLabel = evt.is_free ? 'Free' : 'Tickets Available';
+
+                    grid.innerHTML += `
+          <div class="event-card">
+            <div class="event-card-img">${imgHtml}</div>
+            <div class="event-card-body">
+              <div class="event-card-date">${dateStr} · ${timeStr}</div>
+              <h4 class="event-card-title"><a href="${evt.url}" target="_blank" rel="noopener">${evt.name.text}</a></h4>
+              <p class="event-card-desc">${desc}</p>
+              <div class="event-card-footer">
+                <span class="event-card-status ${statusClass}">${statusLabel}</span>
+                <a href="${evt.url}" target="_blank" rel="noopener" class="event-card-link">Get Tickets →</a>
+              </div>
+            </div>
+          </div>`;
+                });
+
+                loadingEl.style.display = 'none';
+                feedEl.appendChild(grid);
+
+            } catch (err) {
+                console.warn('Eventbrite fetch failed:', err);
+                loadingEl.style.display = 'none';
+                staticEl.style.display = 'grid';
+            }
+        }
+
+        loadEventbriteEvents();
+    </script>
+
+</body>
+
+</html>
