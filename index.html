@@ -17,7 +17,9 @@
 
     <!-- ─── NAV ─── -->
     <nav id="navbar">
-        <a href="#" class="nav-brand">Purple Corkscrew</a>
+        <a href="#" class="nav-brand">
+            <img src="images/pc_logo_knockout_shadow.png" alt="Purple Corkscrew" class="nav-logo">
+        </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#experience">Experience</a></li>
             <li><a href="#events">Events</a></li>
@@ -36,8 +38,8 @@
     <!-- ─── HERO ─── -->
     <section class="hero">
         <p class="hero-tag">Wine Shop &amp; Tasting Room — Avondale Estates, GA</p>
-        <h1 class="hero-title">Sip. <em>Savor.</em><br>Celebrate.</h1>
-        <p class="hero-sub">A cozy, curated wine experience where every guest feels at home. Walk in curious, leave
+        <h1 class="hero-title">Sip. Savor. <em></em>Celebrate.</h1>
+        <p class="hero-sub">A cozy, curated wine experience where every guest feels at home. Walk in curious. Leave
             inspired.</p>
         <div class="hero-cta-group">
             <a href="#visit" class="btn btn-primary btn-arrow">Plan Your Visit</a>
@@ -173,7 +175,7 @@
                         email list for upcoming live music sessions paired with curated wine selections.</p>
                     <div class="event-card-footer">
                         <span class="event-card-status upcoming">Upcoming</span>
-                        <a href="http://eepurl.com/dq_DiP" target="_blank" rel="noopener" class="event-card-link">Get Notified →</a>
+                        <a href="http://eepurl.com/dq_DiP" class="event-card-link" data-modal="signup">Get Notified →</a>
                     </div>
                 </div>
             </div>
@@ -193,16 +195,15 @@
         </div>
 
         <div class="events-cta-wrap">
-            <a href="http://eepurl.com/dq_DiP" class="btn btn-wine btn-arrow" target="_blank" rel="noopener">Get Event Updates via Email</a>
+            <a href="http://eepurl.com/dq_DiP" class="btn btn-wine btn-arrow" data-modal="signup">Get Event Updates via Email</a>
         </div>
     </section>
 
     <!-- ─── CTA STRIP ─── -->
     <div class="cta-strip reveal">
-        <h3>Come As You Are. Leave with a New Favorite.</h3>
+        <h2 class="section-heading">Come As You Are. Leave with a New Favorite.</h2>
         <p>No pretension. No judgment. Just great wine and great company.</p>
-        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Join Our Email
-            List</a>
+        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" data-modal="signup">Join Our Email List</a>
     </div>
 
     <!-- ─── OUR STORY ─── -->
@@ -339,7 +340,18 @@
             -->
 
             <!-- Instagram live feed renders here (paste widget embed code inside) -->
-            <div id="instagram-feed"></div>
+            <div id="instagram-feed">
+                <behold-widget feed-id="srPM7mpkDB5EPe0oea6X"></behold-widget>
+                <script>
+                    (() => {
+                        const d = document,
+                            s = d.createElement("script");
+                        s.type = "module";
+                        s.src = "https://w.behold.so/widget.js";
+                        d.head.append(s);
+                    })();
+                </script>
+            </div>
 
             <!-- FALLBACK: Static gallery shown when no widget is connected -->
             <div class="gallery-grid" id="gallery-static">
@@ -389,9 +401,9 @@
         <h2 class="section-heading">Come Pour with Us</h2>
         <p class="section-subheading">Located in the heart of Avondale Estates, just steps from the town green.</p>
         <div class="visit-grid">
-            <div>
-                <h4 class="visit-hours-heading">
-                    Hours</h4>
+            <!-- Row 1 — Hours -->
+            <div class="visit-hours">
+                <h4 class="visit-hours-heading">Hours</h4>
                 <table class="hours-table">
                     <tr>
                         <td>Monday</td>
@@ -423,24 +435,29 @@
                     </tr>
                 </table>
                 <div class="cashless-badge">💳 Cashless — Credit & Debit Only</div>
-                <div class="visit-info-block">
-                    <h4>Contact</h4>
-                    <p><a href="tel:6785158232">(678) 515-8232</a></p>
-                    <p><a href="/cdn-cgi/l/email-protection#5e373038311e2e2b2c2e323b3d312c352d3d2c3b29703d3133"><span class="__cf_email__" data-cfemail="86efe8e0e9c6f6f3f4f6eae3e5e9f4edf5e5f4e3f1a8e5e9eb">[email&#160;protected]</span></a></p>
-                </div>
-                <div class="visit-info-block">
-                    <h4>Address</h4>
-                    <p>32 N Avondale Rd, Suite A</p>
-                    <p>Avondale Estates, GA 30002</p>
-                    <p class="visit-parking-note">Free parking available.
-                    </p>
-                </div>
             </div>
+
+            <!-- Row 1 — Map -->
             <div class="map-placeholder">
                 <div class="map-pin">📍</div>
                 <div class="map-label">32 N Avondale Rd<br>Suite A</div>
                 <a href="https://www.google.com/maps/search/?api=1&query=32+N+Avondale+Rd+Avondale+Estates+GA"
                     target="_blank" rel="noopener" class="map-link">Open in Google Maps →</a>
+            </div>
+
+            <!-- Row 2 — Contact -->
+            <div class="visit-info-block">
+                <h4>Contact</h4>
+                <p><a href="tel:6785158232">(678) 515-8232</a></p>
+                <p><a href="mailto:info@purplecorkscrew.com">info@purplecorkscrew.com</a></p>
+            </div>
+
+            <!-- Row 2 — Address -->
+            <div class="visit-info-block">
+                <h4>Address</h4>
+                <p>32 N Avondale Rd, Suite A</p>
+                <p>Avondale Estates, GA 30002</p>
+                <p class="visit-parking-note">Free parking available.</p>
             </div>
         </div>
     </section>
@@ -451,15 +468,54 @@
         <p class="section-label">Stay Connected</p>
         <h2>Never Miss a Pour</h2>
         <p>Get updates on new arrivals, upcoming events, and exclusive tastings delivered to your inbox.</p>
-        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Join the Email
-            List</a>
+        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" data-modal="signup">Join the Email List</a>
+    </div>
+
+    <!-- ─── EMAIL SIGNUP MODAL ─── -->
+    <div id="signup-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+        <div class="modal">
+            <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+            <div class="section-divider"></div>
+            <p class="section-label">Stay Connected</p>
+            <h2 id="modal-heading" class="modal-heading">Never Miss a Pour</h2>
+            <p class="modal-sub">Get updates on new arrivals, upcoming events, and exclusive tastings.</p>
+
+            <!--
+              ╔══════════════════════════════════════════════════════════════╗
+              ║  MAILCHIMP EMBEDDED FORM                                     ║
+              ╠══════════════════════════════════════════════════════════════╣
+              ║  1. Log in to Mailchimp                                      ║
+              ║  2. Go to Audience → Signup Forms → Embedded Forms           ║
+              ║  3. Choose "Condensed" or "Classic" style                    ║
+              ║  4. Copy the generated HTML                                  ║
+              ║  5. Delete the placeholder <div> below and paste it here     ║
+              ╚══════════════════════════════════════════════════════════════╝
+            -->
+            <div class="modal-form-placeholder">
+                <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Sign Up on Mailchimp →</a>
+                <p class="modal-form-note">Replace this with your Mailchimp embedded form — see comment above.</p>
+            </div>
+        </div>
     </div>
 
     <!-- ─── FOOTER ─── -->
     <footer>
-        <div class="footer-brand">Purple Corkscrew</div>
-        <div class="footer-copy">Purple Corkscrew, LLC &copy; 2025 — Avondale Estates, GA</div>
+        <div class="footer-brand">
+            <a href="#" class="nav-brand">
+                <img src="images/pc_logo_knockout_shadow.png" alt="Purple Corkscrew" class="nav-logo">
+            </a>
+        </div>
+
         <div class="footer-socials">
             <a href="https://www.instagram.com/purplecorkscrewwine/" target="_blank" rel="noopener">Instagram</a>
             <a href="https://www.purplecorkscrew.com" target="_blank" rel="noopener">Website</a>
-      
+            <a href="mailto:info@purplecorkscrew.com">Email</a>
+        </div>
+        <div class="footer-copy">Purple Corkscrew, LLC &copy; <span id="copyright-year"></span> — Avondale Estates, GA</div>
+    </footer>
+
+    <script src="scripts.js"></script>
+
+</body>
+
+</html>

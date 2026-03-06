@@ -10,8 +10,8 @@
     --gold: #d4a853;
     --gold-light: #e8c97a;
     --text-primary: #f0ece4;
-    --text-secondary: #a8a0b4;
-    --text-muted: #6b6278;
+    --text-secondary: #ccbbe4;
+    --text-muted: #817691;
     --divider: rgba(139, 92, 246, 0.15);
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'Outfit', sans-serif;
@@ -35,6 +35,9 @@ body {
     line-height: 1.7;
     overflow-x: hidden;
 }
+p {
+    font-size: 1.1rem;
+}
 
 /* ─── NAV ─── */
 nav {
@@ -47,25 +50,32 @@ nav {
     align-items: center;
     justify-content: space-between;
     padding: 1rem 3rem;
-    background: rgba(10, 7, 17, 0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--divider);
+    background: rgba(10, 7, 17, 0);
+    backdrop-filter: blur(0);
     transition: all 0.4s;
 }
 
 nav.scrolled {
     padding: 0.6rem 3rem;
-    background: rgba(10, 7, 17, 0.95);
+    background: rgba(10, 7, 17, 0.3);
+     backdrop-filter: blur(10px);
 }
 
 .nav-brand {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--purple-glow);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 80px;
+    width: auto;
+    display: block;
+    transition: height 0.4s;
+}
+
+nav.scrolled .nav-logo {
+    height: 60px;
 }
 
 .nav-links {
@@ -107,6 +117,8 @@ nav.scrolled {
 /* ─── HERO ─── */
 .hero {
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -115,20 +127,25 @@ nav.scrolled {
     padding: 6rem 2rem 4rem;
     position: relative;
     overflow: hidden;
+    background-image: url('images/hero-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
+/* Dark scrim so text stays legible over any photo */
 .hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(109, 40, 217, 0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 30% 70%, rgba(155, 35, 53, 0.08) 0%, transparent 60%);
+        linear-gradient(to bottom, rgba(5, 3, 10, 0.55) 0%, rgba(5, 3, 10, 0.45) 60%, rgba(5, 3, 10, 0.7) 100%),
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(109, 40, 217, 0.15) 0%, transparent 70%);
 }
 
 .hero-tag {
     font-family: var(--font-body);
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -156,7 +173,7 @@ nav.scrolled {
 }
 
 .hero-sub {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
     max-width: 520px;
     margin: 1.5rem auto 2.5rem;
@@ -273,7 +290,7 @@ section {
 }
 
 .section-label {
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -284,7 +301,7 @@ section {
 
 .section-heading {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: 3.2rem;
     font-weight: 700;
     text-align: center;
     line-height: 1.15;
@@ -296,7 +313,7 @@ section {
     color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto 3rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 /* ─── ABOUT ─── */
@@ -309,7 +326,7 @@ section {
 
 .about-text h3 {
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 1.2rem;
     line-height: 1.2;
@@ -339,10 +356,11 @@ section {
     font-weight: 700;
     color: var(--gold);
     line-height: 1;
+    text-align: center;
 }
 
 .about-stat-label {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -427,6 +445,7 @@ section {
 .exp-icon {
     font-size: 2rem;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .exp-card h4 {
@@ -434,16 +453,21 @@ section {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.6rem;
+    text-align: center;
 }
 
 .exp-card p {
     color: var(--text-secondary);
     font-size: 0.92rem;
+    text-align: center;
 }
 
 .exp-card ul {
     list-style: none;
     margin-top: 1rem;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .exp-card li {
@@ -452,6 +476,7 @@ section {
     padding: 0.4rem 0;
     padding-left: 1.2rem;
     position: relative;
+    text-align: left;
 }
 
 .exp-card li::before {
@@ -702,20 +727,20 @@ section {
 .story-content p {
     color: var(--text-secondary);
     margin-bottom: 1.2rem;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.8;
 }
 
 .founder-name {
     font-family: var(--font-display);
-    font-size: 1.3rem;
+    font-size: 1.7rem;
     font-weight: 600;
     color: var(--gold);
     margin-top: 2rem;
 }
 
 .founder-title {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -778,7 +803,8 @@ section {
 .visit-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    column-gap: 3rem;
+    row-gap: 2.5rem;
     align-items: start;
 }
 
@@ -818,7 +844,9 @@ section {
 }
 
 .visit-info-block {
-    margin-top: 2rem;
+    margin-top: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--divider);
 }
 
 .visit-info-block h4 {
@@ -868,7 +896,8 @@ section {
 .map-placeholder {
     background: var(--bg-card);
     border: 1px solid var(--divider);
-    aspect-ratio: 1;
+    min-height: 240px;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -950,12 +979,9 @@ footer {
 }
 
 .footer-brand {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--purple-glow);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.8rem;
 }
 
 .footer-copy {
@@ -1055,6 +1081,170 @@ footer {
     display: none;
 }
 
+/* ─── MODAL ─── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(5, 3, 10, 0.82);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s, visibility 0.35s;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--bg-card);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    max-width: 480px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    position: relative;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.35s;
+}
+
+.modal-overlay.open .modal {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.modal-sub {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-form-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-form-note {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+/* ── Mailchimp embedded form overrides ──
+   These auto-apply once Steffini pastes her embed code in. */
+#mc_embed_signup {
+    background: transparent !important;
+    font-family: var(--font-body) !important;
+    width: 100% !important;
+}
+
+#mc_embed_signup h2 {
+    display: none;
+}
+
+#mc_embed_signup .mc-field-group {
+    width: 100% !important;
+    padding-bottom: 0.75rem !important;
+}
+
+#mc_embed_signup .mc-field-group label {
+    color: var(--text-secondary) !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.4rem !important;
+}
+
+#mc_embed_signup input.email,
+#mc_embed_signup input[type="text"],
+#mc_embed_signup input[type="email"] {
+    background: var(--bg-section) !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    border-radius: 0 !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.95rem !important;
+    padding: 0.75rem 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#mc_embed_signup input.email:focus,
+#mc_embed_signup input[type="text"]:focus,
+#mc_embed_signup input[type="email"]:focus {
+    border-color: var(--purple-primary) !important;
+    outline: none !important;
+}
+
+#mc_embed_signup .button,
+#mc-embedded-subscribe {
+    background: var(--purple-primary) !important;
+    border-radius: 0 !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 0.9rem 2.2rem !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 0.5rem !important;
+    transition: background 0.3s !important;
+}
+
+#mc_embed_signup .button:hover,
+#mc-embedded-subscribe:hover {
+    background: var(--purple-dark) !important;
+}
+
+#mc_embed_signup div#mce-responses {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#mc_embed_signup .response {
+    font-size: 0.85rem !important;
+    margin: 0.75rem 0 0 !important;
+    padding: 0 !important;
+    color: var(--gold) !important;
+}
+
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp {
     from {
@@ -1084,6 +1274,12 @@ footer {
     .about-grid,
     .visit-grid {
         grid-template-columns: 1fr;
+    }
+
+    .visit-info-block {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 1.5rem;
     }
 
     .experience-grid,

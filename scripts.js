@@ -1,3 +1,6 @@
+// ─── COPYRIGHT YEAR ───
+document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
 // ─── NAV SCROLL ───
 const nav = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
@@ -10,6 +13,39 @@ const navLinks = document.getElementById('navLinks');
 menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+// ─── EMAIL SIGNUP MODAL ───
+const signupModal = document.getElementById('signup-modal');
+const modalClose = document.getElementById('modalClose');
+
+function openSignupModal() {
+    signupModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSignupModal() {
+    signupModal.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.querySelectorAll('[data-modal="signup"]').forEach(trigger => {
+    trigger.addEventListener('click', e => {
+        e.preventDefault();
+        openSignupModal();
+    });
+});
+
+modalClose.addEventListener('click', closeSignupModal);
+
+// Close on backdrop click
+signupModal.addEventListener('click', e => {
+    if (e.target === signupModal) closeSignupModal();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && signupModal.classList.contains('open')) closeSignupModal();
 });
 
 // ─── SCROLL REVEAL ───
