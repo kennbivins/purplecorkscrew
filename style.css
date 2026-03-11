@@ -381,9 +381,12 @@ section {
     justify-content: center;
 }
 
-.about-visual-icon {
-    font-size: 8rem;
-    opacity: 0.15;
+.about-visual-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .about-visual-overlay {
@@ -391,21 +394,23 @@ section {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 2rem;
-    background: linear-gradient(to top, rgba(10, 7, 17, 0.95), transparent);
+    padding: 2.5rem 2rem;
+    background: linear-gradient(to top, rgba(10, 7, 17, 0.95) 0%, rgba(10, 7, 17, 0.7) 60%, transparent 100%);
 }
 
 .about-visual-overlay p {
     font-family: var(--font-display);
     font-size: 1.3rem;
     font-style: italic;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.5;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 }
 
 .founder-quote-name {
     text-align: left;
     margin-top: 0.8rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 }
 
 /* ─── EXPERIENCE CARDS ─── */
@@ -896,60 +901,52 @@ section {
     color: var(--purple-glow);
 }
 
-.map-placeholder {
-    background: var(--bg-card);
-    border: 1px solid var(--divider);
+.map-embed {
+    position: relative;
     min-height: 240px;
     align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    position: relative;
     overflow: hidden;
+    border: 1px solid var(--divider);
 }
 
-.map-placeholder::before {
-    content: '';
+.map-embed iframe {
+    width: 100%;
+    height: 100%;
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(135deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
-        linear-gradient(315deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%),
-        linear-gradient(45deg, rgba(139, 92, 246, 0.05) 25%, transparent 25%);
-    background-size: 30px 30px;
-    opacity: 0.5;
+    border: 0;
+    filter: saturate(0.3) brightness(0.45) contrast(1.1);
 }
 
-.map-pin {
-    font-size: 3rem;
-    position: relative;
+.map-tint {
+    position: absolute;
+    inset: 0;
+    background: rgba(104, 64, 98, 0.35);
+    mix-blend-mode: color;
+    pointer-events: none;
 }
 
-.map-label {
-    position: relative;
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-align: center;
-    line-height: 1.4;
-}
-
-.map-link {
-    position: relative;
+.map-embed .map-link {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--purple-glow);
+    color: var(--text-primary);
     text-decoration: none;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    background: rgba(10, 7, 17, 0.7);
+    padding: 0.5rem 1.2rem;
+    backdrop-filter: blur(4px);
+    transition: color 0.3s, background 0.3s;
 }
 
-.map-link:hover {
+.map-embed .map-link:hover {
     color: var(--gold);
+    background: rgba(10, 7, 17, 0.85);
 }
 
 /* ─── EMAIL SIGNUP ─── */
@@ -984,13 +981,13 @@ footer {
 .footer-brand {
     display: flex;
     justify-content: center;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
 }
 
 .footer-copy {
     font-size: 0.75rem;
     color: var(--text-muted);
-    margin-top: 0.3rem;
+    margin-top: 2rem;
 }
 
 .footer-socials {
@@ -1003,15 +1000,20 @@ footer {
 .footer-socials a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: color 0.3s;
 }
 
 .footer-socials a:hover {
     color: var(--gold);
+}
+
+.footer-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
 }
 
 /* ─── GALLERY / INSTAGRAM ─── */
@@ -1325,4 +1327,8 @@ footer {
         gap: 1rem;
         border-bottom: 1px solid var(--divider);
     }
+}
+
+behold-branding {
+    display: none;
 }

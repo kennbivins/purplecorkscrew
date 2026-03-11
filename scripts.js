@@ -60,101 +60,172 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
 
-// ═══════════════════════════════════════════════════════════════
-//  INSTAGRAM GALLERY INTEGRATION (Optional — DIY approach)
-// ═══════════════════════════════════════════════════════════════
-//
-//  The Gallery section supports two approaches:
-//
-//  ─────────────────────────────────────────────────────────────
-//  OPTION A — Third-party widget (RECOMMENDED)
-//  ─────────────────────────────────────────────────────────────
-//
-//  Use Behold (https://behold.so), EmbedSocial, or Elfsight.
-//
-//  1. Sign up → connect @purplecorkscrewwine
-//  2. Choose a layout (grid, masonry, slider, etc.)
-//  3. Copy the <script> embed snippet they provide
-//  4. Paste it inside the <div id="instagram-feed"> in index.html
-//  5. The static fallback grid auto-hides via CSS when the
-//     widget renders content into #instagram-feed
-//
-//  Behold free tier: 1 feed, 12 posts, auto-syncs. No tokens.
-//
-//  ─────────────────────────────────────────────────────────────
-//  OPTION B — Instagram Basic Display API (DIY)
-//  ─────────────────────────────────────────────────────────────
-//
-//  If you want full control over the gallery UI, use the
-//  Instagram API directly. Steps:
-//
-//  1. Create a Meta developer app at developers.facebook.com
-//  2. Add "Instagram Basic Display" product
-//  3. Generate a long-lived user access token
-//  4. Paste it below in IG_CONFIG.token
-//  5. The code below will fetch posts and render them
-//
-//  ⚠ Token expires every 60 days — set a calendar reminder
-//     to refresh it, or automate via a serverless function.
-//
-//  ⚠ The token is visible in client-side JS. For read-only
-//     public media this is acceptable. For tighter security,
-//     proxy through a Cloudflare Worker or Netlify Function.
-//
-// ═══════════════════════════════════════════════════════════════
-
-const IG_CONFIG = {
-    token: '',       // ← PASTE LONG-LIVED ACCESS TOKEN HERE
-    maxPosts: 6      // Number of posts to display
+const EVENTS_CONFIG = {
+  sheetCsvUrl:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUmQvfrstq2LAgQnJMxxBDyHKQmKOFccBau4Wga2fK-QjH4O06DFuNm6gqyO5r5tR-BD9dI2J7EU66/pub?gid=837054704&single=true&output=csv", // ← PASTE PUBLISHED CSV URL HERE
+  maxEvents: 6, // Max events to display
 };
 
-async function loadInstagramFeed() {
-    const feedEl = document.getElementById('instagram-feed');
-    const staticEl = document.getElementById('gallery-static');
 
-    // No token configured — keep the static fallback visible
-    if (!IG_CONFIG.token) return;
+async function loadEventsFromSheet() {
+    const gridEl = document.getElementById('events-grid');
+    const loadingEl = document.getElementById('events-loading');
+    const staticEl = document.getElementById('events-static');
+
+    // Not configured — show static fallback, hide loader
+    if (!EVENTS_CONFIG.sheetCsvUrl) {
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (staticEl) staticEl.style.display = 'grid';
+        return;
+    }
 
     try {
-        const res = await fetch(
-            `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&limit=${IG_CONFIG.maxPosts}&access_token=${IG_CONFIG.token}`
-        );
-        if (!res.ok) throw new Error(`Instagram API ${res.status}`);
+        const cacheBust = `${EVENTS_CONFIG.sheetCsvUrl.includes("?") ? "&" : "?"}t=${Date.now()}`;
+        const res = await fetch(EVENTS_CONFIG.sheetCsvUrl + cacheBust, {cache: "no-store",});
+        if (!res.ok) throw new Error(`Sheet fetch ${res.status}`);
 
-        const data = await res.json();
-        const posts = data.data || [];
+        const text = await res.text();
+        const events = parseCsvToEvents(text);
 
-        if (!posts.length) return;
+        if (!events.length) {
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (staticEl) staticEl.style.display = 'grid';
+            return;
+        }
 
-        // Build gallery grid from API data
+        // Build event cards
         const grid = document.createElement('div');
-        grid.className = 'gallery-grid';
+        grid.className = 'events-grid';
 
-        posts.forEach(post => {
-            const imgSrc = post.media_type === 'VIDEO'
-                ? (post.thumbnail_url || post.media_url)
-                : post.media_url;
+        events.slice(0, EVENTS_CONFIG.maxEvents).forEach(evt => {
+            // Column H: "image" — supports a URL, an emoji, or blank
+            const imgValue = evt.image || evt.emoji || '';
+            const isUrl = imgValue.startsWith('http');
+            const cardImgContent = isUrl
+                ? `<img src="${imgValue}" alt="${evt.title}" loading="lazy">`
+                : (imgValue || '🍷');
 
-            const caption = post.caption
-                ? post.caption.substring(0, 80) + '…'
-                : 'View on Instagram';
-
-            const safeCaption = caption.replace(/"/g, '&quot;');
+            const status = evt.status || 'upcoming';
+            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+            const linkLabel = evt.link_label || 'Details';
+            const linkHref = evt.link || '#visit';
+            const linkTarget = evt.link ? ' target="_blank" rel="noopener"' : '';
 
             grid.innerHTML += `
-                <a href="${post.permalink}" target="_blank" rel="noopener" class="gallery-item" title="${safeCaption}">
-                    <img src="${imgSrc}" alt="${safeCaption}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
-                    <div class="gallery-overlay"><span>View Post</span></div>
-                </a>`;
+                <div class="event-card">
+                    <div class="event-card-img">${cardImgContent}</div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">${evt.date}${evt.time ? ' · ' + evt.time : ''}</div>
+                        <h4 class="event-card-title"><a href="${linkHref}"${linkTarget}>${evt.title}</a></h4>
+                        <p class="event-card-desc">${evt.description}</p>
+                        <div class="event-card-footer">
+                            <span class="event-card-status ${status.replace(/\s+/g, '-')}">${statusLabel}</span>
+                            <a href="${linkHref}"${linkTarget} class="event-card-link">${linkLabel} →</a>
+                        </div>
+                    </div>
+                </div>`;
         });
 
-        feedEl.appendChild(grid);
-        // Static grid auto-hides via CSS: #instagram-feed:not(:empty) ~ #gallery-static
+        // Swap: hide loader and static, show dynamic grid
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (staticEl) staticEl.style.display = 'none';
+        if (gridEl) {
+            gridEl.innerHTML = '';
+            gridEl.appendChild(grid);
+        } else {
+            // If there's no #events-grid wrapper, insert before the CTA
+            const eventsSection = document.getElementById('events');
+            const ctaWrap = eventsSection.querySelector('.events-cta-wrap');
+            if (ctaWrap) eventsSection.insertBefore(grid, ctaWrap);
+        }
 
     } catch (err) {
-        console.warn('Instagram feed fetch failed:', err);
-        // Static fallback remains visible
+        console.warn('Events sheet fetch failed:', err);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (staticEl) staticEl.style.display = 'grid';
     }
 }
 
-loadInstagramFeed();
+/**
+ * Parse CSV text into an array of event objects.
+ * Handles quoted fields with commas and newlines.
+ */
+function parseCsvToEvents(csvText) {
+    const rows = parseCsvRows(csvText);
+    if (rows.length < 2) return []; // Need header + at least 1 data row
+
+    const headers = rows[0].map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+    const events = [];
+
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row.length || row.every(cell => !cell.trim())) continue; // Skip empty rows
+
+        const evt = {};
+        headers.forEach((h, idx) => {
+            evt[h] = (row[idx] || '').trim();
+        });
+
+        // Require at minimum a title
+        if (evt.title) events.push(evt);
+    }
+
+    return events;
+}
+
+/**
+ * Robust CSV row parser that handles quoted fields.
+ */
+function parseCsvRows(text) {
+    const rows = [];
+    let current = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (inQuotes) {
+            if (ch === '"' && next === '"') {
+                field += '"';
+                i++; // Skip escaped quote
+            } else if (ch === '"') {
+                inQuotes = false;
+            } else {
+                field += ch;
+            }
+        } else {
+            if (ch === '"') {
+                inQuotes = true;
+            } else if (ch === ',') {
+                current.push(field);
+                field = '';
+            } else if (ch === '\n' || (ch === '\r' && next === '\n')) {
+                current.push(field);
+                field = '';
+                rows.push(current);
+                current = [];
+                if (ch === '\r') i++; // Skip \n in \r\n
+            } else if (ch === '\r') {
+                current.push(field);
+                field = '';
+                rows.push(current);
+                current = [];
+            } else {
+                field += ch;
+            }
+        }
+    }
+
+    // Last field/row
+    if (field || current.length) {
+        current.push(field);
+        rows.push(current);
+    }
+
+    return rows;
+}
+
+loadEventsFromSheet();
+

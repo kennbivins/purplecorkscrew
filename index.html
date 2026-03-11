@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purple Corkscrew — Wine Shop & Tasting Room | Avondale Estates, GA</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -74,7 +76,7 @@
                 </div>
             </div>
             <div class="about-visual">
-                <div class="about-visual-icon">🍷</div>
+                <img src="images/steffini_bethea_0.jpg" alt="Steffini Bethea, Founder of Purple Corkscrew" class="about-visual-img">
                 <div class="about-visual-overlay">
                     <p>"I wanted people to feel like they're a guest in my home enjoying wine."</p>
                     <div class="founder-name founder-quote-name">— Steffini Bethea</div>
@@ -125,6 +127,8 @@
         </div>
     </section>
 
+
+
     <!-- ─── EVENTS ─── -->
     <section id="events" class="reveal">
         <div class="section-divider"></div>
@@ -133,26 +137,17 @@
         <p class="section-subheading">Wine tastings, live music, special pairings, and more. Grab your spot before they
             fill up.</p>
 
-        <!--
-          ╔══════════════════════════════════════════════════════════════╗
-          ║  HOW TO ADD / UPDATE EVENTS                                 ║
-          ╠══════════════════════════════════════════════════════════════╣
-          ║                                                              ║
-          ║  1. Copy one <div class="event-card"> block below.          ║
-          ║  2. Paste it as the FIRST card in the grid.                  ║
-          ║  3. Update the emoji, date, title, description, and link.    ║
-          ║  4. Set the link to the Mailchimp landing page or RSVP URL.  ║
-          ║  5. Remove past events periodically to keep it current.      ║
-          ║                                                              ║
-          ║  NOTE: Mailchimp doesn't have a public events API like       ║
-          ║  Eventbrite, so events are managed manually here. Steffini   ║
-          ║  creates the event in Mailchimp (email + landing page),      ║
-          ║  then adds/updates a card here with the landing page URL.    ║
-          ║                                                              ║
-          ╚══════════════════════════════════════════════════════════════╝
-        -->
+        <!-- Loading state (shown while fetching from Google Sheets) -->
+        <div class="events-loading" id="events-loading">
+            <div class="spinner"></div>
+            <p>Loading upcoming events...</p>
+        </div>
 
-        <div class="events-grid" id="events-grid">
+        <!-- Dynamic grid (populated by JS from Google Sheets) -->
+        <div id="events-grid"></div>
+
+        <!-- Fallback: static cards shown when sheet is not configured -->
+        <div class="events-grid" id="events-static" style="display:none;">
             <div class="event-card">
                 <div class="event-card-img">🍷</div>
                 <div class="event-card-body">
@@ -175,7 +170,7 @@
                         email list for upcoming live music sessions paired with curated wine selections.</p>
                     <div class="event-card-footer">
                         <span class="event-card-status upcoming">Upcoming</span>
-                        <a href="http://eepurl.com/dq_DiP" class="event-card-link" data-modal="signup">Get Notified →</a>
+                        <a href="#" data-modal="signup" class="event-card-link">Get Notified →</a>
                     </div>
                 </div>
             </div>
@@ -195,16 +190,10 @@
         </div>
 
         <div class="events-cta-wrap">
-            <a href="http://eepurl.com/dq_DiP" class="btn btn-wine btn-arrow" data-modal="signup">Get Event Updates via Email</a>
+            <a href="#" data-modal="signup" class="btn btn-wine btn-arrow">Get Event Updates via Email</a>
         </div>
     </section>
 
-    <!-- ─── CTA STRIP ─── -->
-    <div class="cta-strip reveal">
-        <h2 class="section-heading">Come As You Are. Leave with a New Favorite.</h2>
-        <p>No pretension. No judgment. Just great wine and great company.</p>
-        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" data-modal="signup">Join Our Email List</a>
-    </div>
 
     <!-- ─── OUR STORY ─── -->
     <section id="story" class="section-full story-section reveal">
@@ -226,6 +215,13 @@
             </div>
         </div>
     </section>
+
+    <!-- ─── CTA STRIP ─── -->
+    <div class="cta-strip reveal">
+        <h2 class="section-heading">Come As You Are. Leave with a New Favorite.</h2>
+        <p>No pretension. No judgment. Just great wine and great company.</p>
+        <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" data-modal="signup">Join Our Email List</a>
+    </div>
 
     <!-- ─── NEWS / ARTICLES ─── -->
     <section id="news" class="reveal">
@@ -287,15 +283,15 @@
             </div>
             <div class="test-card">
                 <span class="test-stars">★★★★★</span>
-                <p>I love Steffini and her staff. The place feels so welcoming and cozy. I've learned a lot about wine
-                    and had some great experiences there.</p>
-                <cite>— Kenn B.</cite>
-            </div>
-            <div class="test-card">
-                <span class="test-stars">★★★★★</span>
                 <p>We came for the Thursday night tasting, and it was lovely. Very friendly owner and staff, nice homey
                     vibes, and ample parking.</p>
                 <cite>— Google Review</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>I love Steffini and her staff. The place feels so welcoming and cozy. I've learned a lot about wine
+                    and had some great experiences there.</p>
+                <cite>— Repeat Customer</cite>
             </div>
         </div>
     </section>
@@ -308,40 +304,9 @@
             <h2 class="section-heading">Life at the Corkscrew</h2>
             <p class="section-subheading">Follow along on Instagram for the latest pours, events, and vibes.</p>
 
-            <!--
-              ╔══════════════════════════════════════════════════════════════╗
-              ║  INSTAGRAM GALLERY — HOW TO CONNECT                         ║
-              ╠══════════════════════════════════════════════════════════════╣
-              ║                                                              ║
-              ║  OPTION A — Behold Widget (RECOMMENDED, easiest):            ║
-              ║                                                              ║
-              ║  1. Sign up free at https://behold.so                        ║
-              ║  2. Connect @purplecorkscrewwine Instagram account            ║
-              ║  3. Create a widget → choose layout/colors                   ║
-              ║  4. Copy the embed <script> tag                              ║
-              ║  5. Paste it inside the #instagram-feed div below            ║
-              ║  6. Delete or hide the #gallery-static fallback grid         ║
-              ║                                                              ║
-              ║  Behold auto-syncs — new posts appear automatically.         ║
-              ║  Free tier: 1 feed, up to 12 posts. No token management.    ║
-              ║                                                              ║
-              ║  OPTION B — EmbedSocial or Elfsight:                         ║
-              ║  Same idea. Sign up, connect IG, get embed code, paste.      ║
-              ║                                                              ║
-              ║  OPTION C — Instagram Basic Display API (DIY):               ║
-              ║  1. Create a Meta developer app at developers.facebook.com   ║
-              ║  2. Add "Instagram Basic Display" product                    ║
-              ║  3. Generate a long-lived access token                       ║
-              ║  4. Paste it into IG_CONFIG in scripts.js                    ║
-              ║  5. The JS will fetch and render posts into the grid         ║
-              ║  ⚠ Token expires every 60 days — set a refresh reminder.    ║
-              ║                                                              ║
-              ╚══════════════════════════════════════════════════════════════╝
-            -->
-
             <!-- Instagram live feed renders here (paste widget embed code inside) -->
             <div id="instagram-feed">
-                <behold-widget feed-id="srPM7mpkDB5EPe0oea6X"></behold-widget>
+                <behold-widget feed-id="qOHls6cF17FYADDQaTcn"></behold-widget>
                 <script>
                     (() => {
                         const d = document,
@@ -438,9 +403,12 @@
             </div>
 
             <!-- Row 1 — Map -->
-            <div class="map-placeholder">
-                <div class="map-pin">📍</div>
-                <div class="map-label">32 N Avondale Rd<br>Suite A</div>
+            <div class="map-embed">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3318.5!2d-84.2671!3d33.7721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88f506fd66ccaf69%3A0xb0cd84647fa83c07!2s32%20N%20Avondale%20Rd%2C%20Avondale%20Estates%2C%20GA%2030002!5e0!3m2!1sen!2sus!4v1"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="map-tint"></div>
                 <a href="https://www.google.com/maps/search/?api=1&query=32+N+Avondale+Rd+Avondale+Estates+GA"
                     target="_blank" rel="noopener" class="map-link">Open in Google Maps →</a>
             </div>
@@ -480,20 +448,36 @@
             <h2 id="modal-heading" class="modal-heading">Never Miss a Pour</h2>
             <p class="modal-sub">Get updates on new arrivals, upcoming events, and exclusive tastings.</p>
 
-            <!--
-              ╔══════════════════════════════════════════════════════════════╗
-              ║  MAILCHIMP EMBEDDED FORM                                     ║
-              ╠══════════════════════════════════════════════════════════════╣
-              ║  1. Log in to Mailchimp                                      ║
-              ║  2. Go to Audience → Signup Forms → Embedded Forms           ║
-              ║  3. Choose "Condensed" or "Classic" style                    ║
-              ║  4. Copy the generated HTML                                  ║
-              ║  5. Delete the placeholder <div> below and paste it here     ║
-              ╚══════════════════════════════════════════════════════════════╝
-            -->
-            <div class="modal-form-placeholder">
-                <a href="http://eepurl.com/dq_DiP" class="btn btn-gold btn-arrow" target="_blank" rel="noopener">Sign Up on Mailchimp →</a>
-                <p class="modal-form-note">Replace this with your Mailchimp embedded form — see comment above.</p>
+            <div id="mc_embed_shell">
+                <link href="https://cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+                <div id="mc_embed_signup">
+                    <form action="https://purplecorkscrew.us5.list-manage.com/subscribe/post?u=926c6e023fbf081211d1cb87e&amp;id=d937ddaf67&amp;f_id=000741edf0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                        <div id="mc_embed_signup_scroll">
+                            <h2>Subscribe</h2>
+                            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+                            <div class="mc-field-group">
+                                <label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label>
+                                <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-FNAME">First Name</label>
+                                <input type="text" name="FNAME" class="text" id="mce-FNAME" value="">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-LNAME">Last Name</label>
+                                <input type="text" name="LNAME" class="text" id="mce-LNAME" value="">
+                            </div>
+                            <div id="mce-responses" class="clear">
+                                <div class="response" id="mce-error-response" style="display: none;"></div>
+                                <div class="response" id="mce-success-response" style="display: none;"></div>
+                            </div>
+                            <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_926c6e023fbf081211d1cb87e_d937ddaf67" tabindex="-1" value=""></div>
+                            <div class="clear"><input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe"></div>
+                        </div>
+                    </form>
+                </div>
+                <script src="https://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+                <script>(function($) {window.fnames = new Array(); window.ftypes = new Array(); fnames[0]='EMAIL'; ftypes[0]='email'; fnames[1]='FNAME'; ftypes[1]='text'; fnames[2]='LNAME'; ftypes[2]='text';}(jQuery)); var $mcj = jQuery.noConflict(true);</script>
             </div>
         </div>
     </div>
@@ -507,9 +491,12 @@
         </div>
 
         <div class="footer-socials">
-            <a href="https://www.instagram.com/purplecorkscrewwine/" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://www.purplecorkscrew.com" target="_blank" rel="noopener">Website</a>
-            <a href="mailto:info@purplecorkscrew.com">Email</a>
+            <a href="https://www.instagram.com/purplecorkscrewwine/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg class="footer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.facebook.com/purplecorkscrewwine" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg class="footer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
         </div>
         <div class="footer-copy">Purple Corkscrew, LLC &copy; <span id="copyright-year"></span> — Avondale Estates, GA</div>
     </footer>
