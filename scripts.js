@@ -63,7 +63,7 @@ reveals.forEach(el => observer.observe(el));
 const EVENTS_CONFIG = {
   sheetCsvUrl:
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUmQvfrstq2LAgQnJMxxBDyHKQmKOFccBau4Wga2fK-QjH4O06DFuNm6gqyO5r5tR-BD9dI2J7EU66/pub?gid=837054704&single=true&output=csv", // ← PASTE PUBLISHED CSV URL HERE
-  maxEvents: 6, // Max events to display
+  maxEvents: 12, // Max events to display
 };
 
 
@@ -107,7 +107,7 @@ async function loadEventsFromSheet() {
 
             const status = evt.status || 'upcoming';
             const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-            const linkLabel = evt.link_label || 'Details';
+            const linkLabel = evt.link_label || 'Get Your Tickets';
             const linkHref = evt.link || '#visit';
             const linkTarget = evt.link ? ' target="_blank" rel="noopener"' : '';
 
