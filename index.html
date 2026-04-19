@@ -15,12 +15,18 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body data-badge-pos="hero-above">
 
     <!-- ─── NAV ─── -->
     <nav id="navbar">
         <a href="#" class="nav-brand">
             <img src="images/pc_logo_knockout_shadow.png" alt="Purple Corkscrew" class="nav-logo">
+        </a>
+        <!-- Award badge (under-logo slot) -->
+        <a href="#news" class="award-badge award-badge--under-logo" aria-label="Press accolade">
+            <span class="ab-stars" aria-hidden="true">★★★★★</span>
+            <span class="ab-quote">"One-stop destination to shop and sip."</span>
+            <span class="ab-source">Food & Wine</span>
         </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#experience">Experience</a></li>
@@ -39,6 +45,12 @@
 
     <!-- ─── HERO ─── -->
     <section class="hero">
+        <!-- Award badge (hero-above slot) -->
+        <div class="award-badge award-badge--hero-above" aria-label="Press accolade">
+            <span class="ab-stars" aria-hidden="true">★★★★★</span>
+            <span class="ab-quote">"One-stop destination to shop and sip."</span>
+            <span class="ab-source">Food & Wine</span>
+        </div>
         <p class="hero-tag">Wine Shop &amp; Tasting Room — Avondale Estates, GA</p>
         <h1 class="hero-title">Sip. Savor. <em></em>Celebrate.</h1>
         <p class="hero-sub">A cozy, curated wine experience where every guest feels at home. Walk in curious. Leave
@@ -277,8 +289,17 @@
         <div class="testimonials-grid">
             <div class="test-card">
                 <span class="test-stars">★★★★★</span>
-                <p>The ambiance was calm and serene. The decor was spot on. The music was just right. I will definitely
-                    be visiting again.</p>
+                <p>One-stop destination to shop and sip” with curated selections and strong customer experience.</p>
+                <cite>— Food & Wine</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>A great vibe with something for every palate at every price point.</p>
+                <cite>— Meet Me in Paris ATL</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>The ambiance was calm and serene. The decor was spot on. The music was just right. I will definitely be visiting again.</p>
                 <cite>— Yelp Review</cite>
             </div>
             <div class="test-card">
@@ -289,9 +310,13 @@
             </div>
             <div class="test-card">
                 <span class="test-stars">★★★★★</span>
-                <p>I love Steffini and her staff. The place feels so welcoming and cozy. I've learned a lot about wine
-                    and had some great experiences there.</p>
+                <p>I love Steffini and her staff. The place feels so welcoming and cozy. I've learned a lot about wine and had some great experiences there.</p>
                 <cite>— Repeat Customer</cite>
+            </div>
+            <div class="test-card">
+                <span class="test-stars">★★★★★</span>
+                <p>Community haven for wine enthusiasts</p>
+                <cite>— VinePair</cite>
             </div>
         </div>
     </section>
@@ -307,15 +332,6 @@
             <!-- Instagram live feed renders here (paste widget embed code inside) -->
             <div id="instagram-feed">
                 <behold-widget feed-id="qOHls6cF17FYADDQaTcn"></behold-widget>
-                <script>
-                    (() => {
-                        const d = document,
-                            s = d.createElement("script");
-                        s.type = "module";
-                        s.src = "https://w.behold.so/widget.js";
-                        d.head.append(s);
-                    })();
-                </script>
             </div>
 
             <!-- FALLBACK: Static gallery shown when no widget is connected -->
@@ -502,6 +518,68 @@
     </footer>
 
     <script src="scripts.js"></script>
+
+    <!-- ─── BADGE TWEAKS (position switcher) ─── -->
+    <div class="badge-tweaks" id="badgeTweaks">
+      <h4>Badge <small>Position</small></h4>
+      <div class="lbl">Placement</div>
+      <div class="opts" id="badgePosOpts">
+        <div class="opt" data-p="hero-above">Above Hero</div>
+        <div class="opt" data-p="under-logo">Under Logo</div>
+        <div class="opt" data-p="off">Hidden</div>
+      </div>
+      <div class="hint">On mobile, "Under Logo" auto-falls-back to "Above Hero" for legibility.</div>
+    </div>
+    <button class="badge-tweaks-fab" id="badgeTweaksFab">Tweaks</button>
+
+    <script>
+    (function(){
+      const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+        "badge_position": "hero-above"
+      }/*EDITMODE-END*/;
+
+      const panel = document.getElementById('badgeTweaks');
+      const fab = document.getElementById('badgeTweaksFab');
+      const body = document.body;
+
+      function apply(pos){
+        if(pos === 'off'){ body.setAttribute('data-badge-pos','off'); }
+        else { body.setAttribute('data-badge-pos', pos); }
+        document.querySelectorAll('#badgePosOpts .opt').forEach(el=>{
+          el.classList.toggle('on', el.dataset.p === pos);
+        });
+      }
+
+      document.querySelectorAll('#badgePosOpts .opt').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          const pos = el.dataset.p;
+          apply(pos);
+          try{
+            window.parent.postMessage({type:'__edit_mode_set_keys', edits:{badge_position: pos}}, '*');
+          }catch(e){}
+        });
+      });
+
+      fab.addEventListener('click', ()=>{
+        panel.classList.add('show');
+        fab.style.display = 'none';
+      });
+
+      // Edit-mode protocol (host toolbar Tweaks toggle)
+      window.addEventListener('message', (e)=>{
+        const d = e.data || {};
+        if(d.type === '__activate_edit_mode'){
+          panel.classList.add('show'); fab.style.display='none';
+        }
+        if(d.type === '__deactivate_edit_mode'){
+          panel.classList.remove('show'); fab.style.display='block';
+        }
+      });
+      try{ window.parent.postMessage({type:'__edit_mode_available'}, '*'); }catch(e){}
+
+      apply(TWEAK_DEFAULTS.badge_position || 'hero-above');
+    })();
+    </script>
 
 </body>
 

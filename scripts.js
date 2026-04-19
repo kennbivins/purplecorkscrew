@@ -15,6 +15,67 @@ navLinks.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => navLinks.classList.remove('open'));
 });
 
+// ─── NAV ACTIVE (scroll + hash) ───
+const NAV_SECTION_IDS = ['experience', 'events', 'story', 'news', 'voices', 'gallery', 'visit', 'connect'];
+
+function setNavActiveById(id) {
+    navLinks.querySelectorAll('a[href^="#"]').forEach(link => {
+        const href = link.getAttribute('href');
+        const match = href === `#${id}`;
+        link.classList.toggle('active', match && id !== '');
+    });
+}
+
+function updateNavActiveFromScroll() {
+    const navHeight = nav.offsetHeight;
+    const line = window.scrollY + navHeight + 32;
+    let activeId = '';
+    for (const sectionId of NAV_SECTION_IDS) {
+        const el = document.getElementById(sectionId);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        if (line >= top) activeId = sectionId;
+    }
+    setNavActiveById(activeId);
+}
+
+let navActiveRaf = 0;
+function scheduleNavActive() {
+    if (navActiveRaf) return;
+    navActiveRaf = requestAnimationFrame(() => {
+        navActiveRaf = 0;
+        updateNavActiveFromScroll();
+    });
+}
+
+window.addEventListener('scroll', scheduleNavActive, { passive: true });
+window.addEventListener('resize', scheduleNavActive, { passive: true });
+window.addEventListener('load', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash && NAV_SECTION_IDS.includes(hash)) {
+        setNavActiveById(hash);
+    } else {
+        updateNavActiveFromScroll();
+    }
+});
+
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash && NAV_SECTION_IDS.includes(hash)) {
+        setNavActiveById(hash);
+    } else {
+        updateNavActiveFromScroll();
+    }
+});
+
+navLinks.querySelectorAll('a[href^="#"]').forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    if (!id || !NAV_SECTION_IDS.includes(id)) return;
+    a.addEventListener('click', () => {
+        setNavActiveById(id);
+    });
+});
+
 // ─── EMAIL SIGNUP MODAL ───
 const signupModal = document.getElementById('signup-modal');
 const modalClose = document.getElementById('modalClose');
@@ -59,6 +120,38 @@ const observer = new IntersectionObserver((entries) => {
 });
 reveals.forEach(el => observer.observe(el));
 
+// ─── BEHOLD INSTAGRAM (lazy load) ───
+// Loads widget.js only when #gallery is near the viewport. Console messages from
+// Behold / Google (maps beacon, unload policy, logger) are third-party, not this file.
+(function loadBeholdWhenVisible() {
+    const gallery = document.getElementById('gallery');
+    if (!gallery) return;
+
+    function injectBeholdScript() {
+        if (document.querySelector('script[data-behold-widget]')) return;
+        const s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'https://w.behold.so/widget.js';
+        s.dataset.beholdWidget = 'true';
+        document.head.appendChild(s);
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        injectBeholdScript();
+        return;
+    }
+
+    const io = new IntersectionObserver(
+        (entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+                io.disconnect();
+                injectBeholdScript();
+            }
+        },
+        { rootMargin: '240px 0px', threshold: 0 }
+    );
+    io.observe(gallery);
+})();
 
 const EVENTS_CONFIG = {
   sheetCsvUrl:
