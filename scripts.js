@@ -200,20 +200,24 @@ async function loadEventsFromSheet() {
 
             const status = evt.status || 'upcoming';
             const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+            const hasLink = evt.link || evt.link_label;
             const linkLabel = evt.link_label || 'Get Your Tickets';
-            const linkHref = evt.link || '#visit';
+            const linkHref = evt.link || '#';
             const linkTarget = evt.link ? ' target="_blank" rel="noopener"' : '';
+            const linkHtml = hasLink
+                ? `<a href="${linkHref}"${linkTarget} class="event-card-link">${linkLabel} →</a>`
+                : '';
 
             grid.innerHTML += `
                 <div class="event-card">
                     <div class="event-card-img">${cardImgContent}</div>
                     <div class="event-card-body">
                         <div class="event-card-date">${evt.date}${evt.time ? ' · ' + evt.time : ''}</div>
-                        <h4 class="event-card-title"><a href="${linkHref}"${linkTarget}>${evt.title}</a></h4>
+                        <h4 class="event-card-title">${evt.title}</h4>
                         <p class="event-card-desc">${evt.description}</p>
                         <div class="event-card-footer">
                             <span class="event-card-status ${status.replace(/\s+/g, '-')}">${statusLabel}</span>
-                            <a href="${linkHref}"${linkTarget} class="event-card-link">${linkLabel} →</a>
+                            ${linkHtml}
                         </div>
                     </div>
                 </div>`;
