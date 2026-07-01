@@ -200,15 +200,14 @@ async function loadEventsFromSheet() {
 
             const status = evt.status || 'upcoming';
             const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-            const hasLink = evt.link || evt.link_label;
-            const linkLabel = evt.link_label || 'Get Your Tickets';
-            const rawLink = evt.link || '';
-            const isEmail = rawLink && !rawLink.startsWith('http') && !rawLink.startsWith('mailto:') && rawLink.includes('@');
-            const linkHref = rawLink
-                ? (isEmail ? `mailto:${rawLink}` : rawLink.startsWith('mailto:') ? rawLink : rawLink)
-                : '#';
-            const linkTarget = (rawLink && !isEmail && !rawLink.startsWith('mailto:')) ? ' target="_blank" rel="noopener"' : '';
-            const linkHtml = hasLink
+            const rawLink = (evt.link || '').trim();
+            const linkLabel = (evt.link_label || '').trim() || 'Get Your Tickets';
+            const isEmail = rawLink.includes('@') && !rawLink.startsWith('http');
+            const linkHref = !rawLink ? null
+                : isEmail ? `mailto:${rawLink.replace(/^mailto:/i, '')}`
+                : rawLink;
+            const linkTarget = linkHref && !isEmail ? ' target="_blank" rel="noopener"' : '';
+            const linkHtml = linkHref
                 ? `<a href="${linkHref}"${linkTarget} class="event-card-link">${linkLabel} →</a>`
                 : '';
 
