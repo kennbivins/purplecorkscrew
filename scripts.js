@@ -202,8 +202,12 @@ async function loadEventsFromSheet() {
             const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
             const hasLink = evt.link || evt.link_label;
             const linkLabel = evt.link_label || 'Get Your Tickets';
-            const linkHref = evt.link || '#';
-            const linkTarget = evt.link ? ' target="_blank" rel="noopener"' : '';
+            const rawLink = evt.link || '';
+            const isEmail = rawLink && !rawLink.startsWith('http') && !rawLink.startsWith('mailto:') && rawLink.includes('@');
+            const linkHref = rawLink
+                ? (isEmail ? `mailto:${rawLink}` : rawLink.startsWith('mailto:') ? rawLink : rawLink)
+                : '#';
+            const linkTarget = (rawLink && !isEmail && !rawLink.startsWith('mailto:')) ? ' target="_blank" rel="noopener"' : '';
             const linkHtml = hasLink
                 ? `<a href="${linkHref}"${linkTarget} class="event-card-link">${linkLabel} →</a>`
                 : '';
